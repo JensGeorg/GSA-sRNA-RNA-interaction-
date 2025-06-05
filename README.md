@@ -161,9 +161,9 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
      for (j in 1:length(gsa_param_names_arg)) {
        p_name <- gsa_param_names_arg[j]
        p_scaled_val <- scaled_sample_row[j]
-       p_min <- min_ranges_arg[[p_name]] # Use [[ for lists
-       p_max <- max_ranges_arg[[p_name]] # Use [[ for lists
-       dist_type <- param_distributions_arg[[p_name]] # Use [[ for lists
+       p_min <- min_ranges_arg[[p_name]] 
+       p_max <- max_ranges_arg[[p_name]] 
+       dist_type <- param_distributions_arg[[p_name]] 
 
        if (is.null(dist_type)) stop(paste("Distribution type not specified for parameter:", p_name))
 
@@ -180,16 +180,7 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
      }
 
      params_for_run <- baseline_params_arg
-     # Update only the GSA parameters with their unscaled values
      params_for_run[names(unscaled_params)] <- unscaled_params
-
-     # Note: The original script had some logic for k_init interdependency.
-     # This simplified wrapper assumes k_init is either part of gsa_param_names_arg
-     # or its baseline value is appropriate. If k_init depends on other *sampled*
-     # parameters (like a sampled alpha_m or k_elon) and k_init itself is *not* sampled,
-     # that dependency would need to be re-calculated here using the sampled values.
-     # For this version, we assume k_init is handled correctly by being either
-     # directly sampled or using its baseline value which is consistent.
 
      if (any(is.na(params_for_run[gsa_param_names_arg]))) {
         # warning(paste("NA found in parameters for run after unscaling for params:", paste(gsa_param_names_arg, collapse=", ")))
@@ -288,10 +279,6 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
    ```R
    # run_gsa_analysis.R
 
-   # --- 0. Setup and Configuration ---
-   # Clear workspace (optional, use with caution)
-   # rm(list = ls())
-
    # Load Required Packages
    library(sensitivity)
    library(deSolve)
@@ -306,7 +293,7 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
 
    # --- 1. Define Baseline Parameters and Initial States ---
    # F_KON_CONVERSION is defined in model_and_metric_functions.R
-   k_elon_default_rate <- 25/1000 # Example, adjust as needed
+   k_elon_default_rate <- 25/1000 # Example for a gene of length 1000nt and an elongation rate 0 25nt/s, adjust as needed
 
    baseline_params <- list(
      k_init    = 0.96,
@@ -319,26 +306,22 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
      k_on      = (1.3e6) / F_KON_CONVERSION, # Molar to molecular conversion
      k_off     = 0.3,
      k_elon    = k_elon_default_rate,
-     k_m       = 14.0, # Ensure it's numeric
-     k_ms      = 14.0, # Ensure it's numeric
-     k_coreg   = 1.0   # Ensure it's numeric
-     # Add other fixed parameters if any (e.g., alpha_m if not varied)
+     k_m       = 14.0,
+     k_ms      = 14.0,
+     k_coreg   = 1.0 
    )
 
    default_initial_states <- c(
      m = 0, ms = 0, s = baseline_params$alpha_s / baseline_params$beta_s,
      m_pre = 0, m_pre_s = 0, m_trunc_s = 0, p = 0
    )
-   # Ensure s is not NA/Inf if beta_s can be zero
-   if(!is.finite(default_initial_states["s"])) default_initial_states["s"] <- 0
-
 
    # --- 2. Define Parameters for GSA ---
    # List of parameters to vary, their ranges, and distributions
    gsa_parameters_definition <- list(
      k_init    = list(min=0.1,    max=2,    dist="uniform"),
      alpha_s   = list(min=0.1,    max=2,    dist="uniform"),
-     k_on      = list(min=1.660578e-06 / F_KON_CONVERSION, max=0.1660578 / F_KON_CONVERSION, dist="loguniform"), # Assuming original values were molecular
+     k_on      = list(min=1.660578e-06, max=0.1660578 , dist="loguniform"),
      k_off     = list(min=1e-3,   max=100,  dist="loguniform"),
      beta_m    = list(min=0.0002, max=0.06, dist="loguniform"),
      beta_ms   = list(min=0.0002, max=0.06, dist="loguniform"),
@@ -346,14 +329,10 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
      k_coreg   = list(min=0.01,   max=0.99, dist="uniform"),
      k_elon    = list(min=5/1000, max=60/1000, dist="uniform"),
      beta_m_co = list(min=0.0001, max=0.06, dist="loguniform"),
-     beta_p    = list(min=0.0005, max=0.05, dist="loguniform"), # Assuming baseline_params$beta_p = 0.005
+     beta_p    = list(min=0.0005, max=0.05, dist="loguniform"), 
      k_m       = list(min=0.1,    max=30,   dist="uniform"),
      k_ms      = list(min=0.1,    max=30,   dist="uniform")
    )
-   # Note: For k_on, if the min/max in your example were already converted, adjust accordingly.
-   # I've assumed they might be molecular and need conversion if your model expects molar k_on.
-   # If your model expects k_on directly in your units, use the original numbers:
-   # k_on      = list(min=1.660578e-06, max=0.1660578, dist="loguniform"),
 
    gsa_param_names_to_vary <- names(gsa_parameters_definition)
    k_gsa_varied <- length(gsa_param_names_to_vary)
@@ -364,17 +343,14 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
 
 
    # --- 3. Run Sobol GSA (in Parallel) ---
-   n_base_samples_sobol <- 1e3 # ADJUST AS NEEDED (e.g., 1e3 for quick, 1e4+ for robust)
+   n_base_samples_sobol <- 1e5 # ADJUST AS NEEDED (e.g., 1e3 for quick, 1e4+ for robust)
    cat("Preparing Sobol GSA with", n_base_samples_sobol, "base samples for", k_gsa_varied, "parameters.\n")
 
    # Generate Sobol design matrices (scaled 0-1)
    X1_sobol <- data.frame(matrix(runif(n_base_samples_sobol * k_gsa_varied), nrow = n_base_samples_sobol, byrow = TRUE))
    X2_sobol <- data.frame(matrix(runif(n_base_samples_sobol * k_gsa_varied), nrow = n_base_samples_sobol, byrow = TRUE))
-   # Column names are not strictly necessary for sobolSalt if gsa_param_names_to_vary is passed correctly later
-   # names(X1_sobol) <- gsa_param_names_to_vary
-   # names(X2_sobol) <- gsa_param_names_to_vary
 
-   sobol_design_object <- sensitivity::sobolSalt(model = NULL, X1 = X1_sobol, X2 = X2_sobol, nboot = 100) # nboot for CIs
+   sobol_design_object <- sensitivity::sobolSalt(model = NULL, X1 = X1_sobol, X2 = X2_sobol, nboot = 100) 
 
    # Setup for parallel execution
    num_cores_to_use <- max(1, parallel::detectCores() - 1)
@@ -414,8 +390,6 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
        warning(paste(num_na_outputs, "NA values produced in GSA output. Results might be unreliable. Consider checking parameter ranges or ODE stability. Imputing with median for Sobol calculation."))
        median_output_for_imputation <- median(gsa_model_outputs, na.rm=TRUE)
        if (is.na(median_output_for_imputation) && num_na_outputs < length(gsa_model_outputs)) { # if median is NA but not all are NA
-           # Fallback if median is NA (e.g. too many NAs, or extreme values making median NA)
-           # This is a basic imputation, more sophisticated methods might be needed
            warning("Median for imputation is NA, attempting to use mean.")
            mean_output_for_imputation <- mean(gsa_model_outputs, na.rm=TRUE)
             if(is.na(mean_output_for_imputation)){
@@ -427,7 +401,7 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
        } else {
             gsa_model_outputs[is.na(gsa_model_outputs)] <- median_output_for_imputation
        }
-       if(all(is.na(gsa_model_outputs))) stop("All GSA outputs are still NA after imputation. Cannot proceed.") # Final check
+       if(all(is.na(gsa_model_outputs))) stop("All GSA outputs are still NA after imputation. Cannot proceed.") 
    }
 
 
@@ -447,21 +421,17 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
    }
 
    # --- 6. Unscale Parameters and Combine with Outputs for Further Analysis ---
-   cat("\nUnscaling parameter samples to their actual values...\n")
    unscaled_parameters_df_gsa <- unscale_sobol_matrix(
-       sobol_design_object$X, # The full design matrix used by Sobol
+       sobol_design_object$X,
        gsa_param_names_to_vary,
        min_ranges_for_gsa,
        max_ranges_for_gsa,
        param_distributions_for_gsa
    )
-   cat("Unscaling complete.\n")
 
    # Combine unscaled parameters with GSA output values
-   # Note: sobol_design_object$X has N*(k+2) rows. gsa_model_outputs should match this.
    if (length(gsa_model_outputs) == nrow(unscaled_parameters_df_gsa)) {
      gsa_results_with_inputs_df <- cbind(unscaled_parameters_df_gsa, regulation_strength = gsa_model_outputs)
-     cat("\nFirst few rows of combined data (unscaled parameters and output):\n")
      print(head(gsa_results_with_inputs_df))
 
      # Save the combined data and the sobol object for further analysis
@@ -471,7 +441,6 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
          gsa_parameter_definitions = gsa_parameters_definition # For reference
      )
      save(gsa_output_data, file = file.path("results", "gsa_analysis_outputs.RData"))
-     cat(paste("\nFull GSA results and design saved to results/gsa_analysis_outputs.RData\n"))
 
    } else {
      cat(paste("Error: 'gsa_model_outputs' length (", length(gsa_model_outputs),
@@ -479,7 +448,6 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
                nrow(unscaled_parameters_df_gsa), ").\n"))
    }
 
-   cat("\n--- GSA Workflow Complete ---\n")
    ```
 
 **Key improvements in this structure:**
