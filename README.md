@@ -82,7 +82,7 @@ The original data can be downloaded from zenodo.
 
 source("src/model_and_metric_functions.R")
 source("src/gsa_sobol_functions.R")
-source("src/gsa_results_scatterplots.R")
+
 
 # load results form the paper
 load("gsa_analysis_outputs.RData") # download from zenodo or generate own dataset
@@ -161,4 +161,36 @@ density_plot <- ggplot(plot_data_density, aes(x = output_value)) +
 print(density_plot)
 
 ```
-<img src="figures/density.png" alt="Model Scheme" width="60%">
+<img src="figures/density.png" alt="Model Scheme" width="70%">
+
+```R
+# scatterplot of selected parameters or parameter-ratios
+source("src/gsa_results_scatterplots.R")
+
+number_of_bins_2d <- 50 
+output_col_name <- "regulation_strength"
+
+data_for_km_kms_plot <- gsa_results_with_inputs_df %>%
+    filter(is.finite(k_m) & is.finite(k_ms) & k_ms > epsilon & k_m > epsilon) %>% # Ensure positive for ratio
+    mutate(
+      ratio_km_kms = (k_m + epsilon) / (k_ms + epsilon) # Calculate ratio and add as a new column
+    )
+plot_km_kms_ratio <- generate_gsa_visualization(
+    data_df = data_for_km_kms_plot,
+    x_var_col = "ratio_km_kms", # Use the newly created ratio column
+    y_var_col = output_col_name,
+    plot_title = expression("Regulation Strength vs. " ~ (italic(k)[m]/italic(k)[ms])),
+    x_axis_label = expression((italic(k)[m]/italic(k)[ms])),
+    y_axis_label = expression(log[2]("Protein Reg. Strength")), # Assuming your output is log2
+    use_log_x_scale = TRUE,      # To apply log10 scale to the ratio values on x-axis
+    filter_x_positive = TRUE,    # Ensure ratio values are positive before log scaling
+    vline_xintercept = NULL, # Your specific vertical line
+    hline_yintercepts = c(0, -1, 1), # Your horizontal lines
+    num_bins_2d = number_of_bins_2d,
+    epsilon_val = epsilon
+  )
+print(plot_km_kms_ratio)
+
+```
+
+<img src="figures/plot_km_kms_ratio.png" alt="Model Scheme" width="60%">
