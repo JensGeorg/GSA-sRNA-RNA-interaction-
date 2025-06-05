@@ -95,21 +95,9 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
                                                      ode_model_func,
                                                      sim_times = c(0, TIME_FOR_STEADY_STATE), # Use global or pass
                                                      rtol = 1e-6, atol = 1e-10) {
-     # (Keep the print statements for debugging if you like, or remove for cleaner runs)
-     # print(paste("Initial states for metric calc:", paste(names(initial_states), initial_states, collapse=", ")))
-     # print(paste("Current params for metric calc:", paste(names(current_params), current_params, collapse=", ")))
 
      params_scenario <- current_params
-     # Ensure k_on is used if k_on_molecular is present (idempotent if k_on already exists)
-     if ("k_on_molecular" %in% names(params_scenario) && !("k_on" %in% names(params_scenario))) {
-       params_scenario[["k_on"]] <- params_scenario[["k_on_molecular"]]
-     } else if (!"k_on" %in% names(params_scenario)) {
-       # This case should ideally not happen if baseline_params has k_on
-       warning("k_on parameter not found in params_scenario for scenario run.")
-       return(NA)
-     }
-
-
+    
      out_scenario_df <- tryCatch({
        out <- deSolve::ode(y = initial_states, times = sim_times, func = ode_model_func,
                            parms = params_scenario, method = "lsoda", rtol = rtol, atol = atol)
@@ -123,9 +111,7 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
 
      params_no_sRNA <- params_scenario
      params_no_sRNA[["k_on"]] <- 0 # Simulate with no sRNA interaction
-     # It's good to also ensure alpha_s is effectively zero or s is depleted if k_on=0 is meant to remove sRNA effect
-     # For simplicity, just k_on = 0 is used as per original script's logic for this comparison.
-
+    
      out_no_sRNA_df <- tryCatch({
        out <- deSolve::ode(y = initial_states, times = sim_times, func = ode_model_func,
                            parms = params_no_sRNA, method = "lsoda", rtol = rtol, atol = atol)
@@ -149,7 +135,6 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
                             }
 
      if(!is.finite(regulation_strength)) return(NA)
-     # print(paste("p_scenario:", p_scenario, "p_no_sRNA:", p_no_sRNA_interaction, "RegStrength:", regulation_strength))
      return(regulation_strength)
    }
    ```
