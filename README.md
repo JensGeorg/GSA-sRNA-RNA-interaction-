@@ -167,6 +167,7 @@ print(density_plot)
 # scatterplot of selected parameters or parameter-ratios
 source("src/gsa_results_scatterplots.R")
 
+epsilon <- 1e-12
 number_of_bins_2d <- 50 
 output_col_name <- "regulation_strength"
 
@@ -194,3 +195,8 @@ print(plot_km_kms_ratio)
 ```
 
 <img src="figures/plot_km_kms_ratio.png" alt="Model Scheme" width="60%">
+
+```R
+
+
+```
