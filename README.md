@@ -4,7 +4,7 @@ This repository contains R scripts to perform a Global Sensitivity Analysis (GSA
 
 <img src="figures/scheme_w_odes.jpg" alt="Model Scheme" width="90%">
 
-## Interactive Shiny App  Shiny App
+## Interactive Shiny App
 
 Explore the model parameters and their effects on sRNA-mediated regulation interactively using our Shiny application!
 
