@@ -4,6 +4,15 @@ This repository contains R scripts to perform a Global Sensitivity Analysis (GSA
 
 <img src="figures/scheme_w_odes.jpg" alt="Model Scheme" width="90%">
 
+## Interactive Shiny App  Shiny App
+
+Explore the model parameters and their effects on sRNA-mediated regulation interactively using our Shiny application!
+
+**[Launch the sRNA-RNA Interaction Simulator App](https://jensrna.shinyapps.io/sRNA_RNA_int_app/)**
+
+[![Preview of the sRNA Interaction Shiny App](figures/shiny_app_preview.png)](https://jensrna.shinyapps.io/sRNA_RNA_int_app/)
+*(Click the image above or the link to open the app)*
+
 ## Methodology Overview
 
 The GSA process involves the following key steps, implemented in the scripts:
