@@ -10,8 +10,8 @@ Explore the model parameters and their effects on sRNA-mediated regulation inter
 
 **[Launch the sRNA-RNA Interaction Simulator App](https://jensrna.shinyapps.io/sRNA_RNA_int_app/)**
 
-[![Preview of the sRNA Interaction Shiny App](figures/shiny_app_preview.png)](https://jensrna.shinyapps.io/sRNA_RNA_int_app/)
-*(Click the image above or the link to open the app)*
+[<img src="figures/shiny_app_preview.png" alt="Preview of the sRNA Interaction Shiny App" width="40%">](https://jensrna.shinyapps.io/sRNA_RNA_int_app/)
+
 
 ## Methodology Overview
 
