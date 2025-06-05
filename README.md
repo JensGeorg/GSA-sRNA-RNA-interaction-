@@ -98,3 +98,67 @@ sobol_plot <- plot_sobol_indices(sobol_indices_summary, gsa_param_names_to_vary)
 print(sobol_plot)
 ```
 <img src="figures/sobol_indices.png" alt="Model Scheme" width="60%">
+
+```R
+# plot density of regulation strength
+outcome_col_name <- "regulation_strength"
+
+# Filter out NA/NaN/Inf values for the density plot
+plot_data_density <- gsa_results_with_inputs_df %>%
+  select(output_value = all_of(outcome_col_name)) %>%
+  filter(is.finite(output_value))
+
+# --- Calculate Key Statistics for Annotations (Optional) ---
+mean_val <- mean(plot_data_density$output_value, na.rm = TRUE)
+median_val <- median(plot_data_density$output_value, na.rm = TRUE)
+sd_val <- sd(plot_data_density$output_value, na.rm = TRUE)
+
+# --- Create the Density Plot ---
+density_plot <- ggplot(plot_data_density, aes(x = output_value)) +
+  geom_density(
+    fill = "skyblue",         # Fill color for the density area
+    color = "darkblue",       # Line color for the density curve
+    alpha = 0.7,              # Transparency of the fill
+    linewidth = 0.8            # Thickness of the density line
+  ) +
+  
+  # --- Optional: Add Vertical Lines for Reference ---
+  geom_vline(xintercept = 0, 
+             linetype = "solid", 
+             color = "black", 
+             linewidth = 0.6) +
+  geom_vline(xintercept = mean_val, 
+             linetype = "dashed", 
+             color = "red", 
+             linewidth = 0.7) +
+  geom_vline(xintercept = median_val, 
+             linetype = "dotted", 
+             color = "darkgreen", 
+             linewidth = 0.7) +
+  
+  
+  annotate("text", x = mean_val, y = 0, label = paste("Mean =", round(mean_val, 2)), 
+           vjust = -0.5, hjust = ifelse(mean_val > median_val, -0.1, 1.1), color = "red", size = 3.5) +
+  annotate("text", x = median_val, y = 0, label = paste("Median =", round(median_val, 2)), 
+           vjust = 1.5, hjust = ifelse(median_val > mean_val, -0.1, 1.1), color = "darkgreen", size = 3.5) +
+
+  # --- Labels and Theming ---
+  labs(
+    title = "Density Plot of Regulation Strength",
+    x = expression(log[2]("Protein Regulation Strength")), # Modify if your metric is different
+    y = "Density"
+  ) +
+  theme_minimal(base_size = 14) + # Or theme_bw() or other themes
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.title = element_text(face = "bold"),
+    panel.grid.major.y = element_line(linetype = "dashed", color="grey80"),
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.x = element_line(linetype = "dotted", color="grey90")
+  )
+
+# --- Print the Plot ---
+print(density_plot)
+
+```
+<img src="figures/density.png" alt="Model Scheme" width="60%">
