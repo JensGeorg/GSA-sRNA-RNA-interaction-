@@ -64,6 +64,12 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
 * (Potentially other helper functions for GSA setup or post-processing if you expand).
 
 ---
+## Data Availability
+
+The raw and processed data from the Global Sensitivity Analysis presented in this project, including the `gsa_results_with_inputs_df` and other relevant outputs, are too large to be hosted directly in this GitHub repository. They have been archived on Zenodo and are publicly available:
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15599898.svg)](https://doi.org/10.5281/zenodo.15599898)
+
 
 ## Analyze results
 
