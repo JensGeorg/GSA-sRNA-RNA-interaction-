@@ -66,3 +66,22 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
 ---
 
 ## Analyze results
+
+```R
+source("src/model_and_metric_functions.R")
+source("src/gsa_sobol_functions.R")
+source("src/gsa_results_scatterplots.R")
+
+# load results form the paper
+load("data/gsa_analysis_outputs.RData")
+
+# prepare objects from the loaded data
+gsa_results_with_inputs_df<-gsa_output_data[[1]]
+sobol_indices_summary<-gsa_output_data[[2]]
+gsa_parameter_definitions<-gsa_output_data[[3]]  
+gsa_param_names_to_vary <- names(gsa_parameter_definitions)
+
+# plot data
+sobol_plot <- plot_sobol_indices(sobol_indices_summary, gsa_param_names_to_vary)
+print(sobol_plot)
+```
