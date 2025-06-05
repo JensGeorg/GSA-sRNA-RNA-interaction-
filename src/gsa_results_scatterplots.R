@@ -1,4 +1,5 @@
 # gsa_results_scatterplots.R
+
 # Ensure required packages are loaded
 library(ggplot2)
 library(dplyr)
@@ -21,8 +22,7 @@ generate_gsa_visualization <- function(
     gam_linewidth = 1.5,
     point_alpha = 0.5,       # Alpha for points if geom_point is used instead of geom_bin2d
     base_font_size = 11,
-    epsilon_val = 1e-9,       # Epsilon for filtering positive x if filter_x_positive is TRUE
-	use_absolute = FALSE
+    epsilon_val = 1e-9     # Epsilon for filtering positive x if filter_x_positive is TRUE
 ) {
 
   # --- Input Checks ---
@@ -44,15 +44,10 @@ generate_gsa_visualization <- function(
 
   # --- Data Preparation ---
   
-  if(use_absolute){
-  plot_data <- data_df %>%
-    select(x_val = all_of(x_var_col), y_val = abs(all_of(y_var_col))) %>%
-    filter(is.finite(x_val) & is.finite(y_val))
-  } else{
   plot_data <- data_df %>%
     select(x_val = all_of(x_var_col), y_val = all_of(y_var_col)) %>%
     filter(is.finite(x_val) & is.finite(y_val))
-}
+
 
   if (filter_x_positive) {
     plot_data <- plot_data %>% filter(x_val > epsilon_val)
