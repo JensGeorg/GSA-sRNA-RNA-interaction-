@@ -209,7 +209,7 @@ plot_km_kms_ratio <- generate_gsa_visualization(
     y_axis_label = expression(log[2]("Protein Reg. Strength")), # Assuming your output is log2
     use_log_x_scale = TRUE,      # To apply log10 scale to the ratio values on x-axis
     filter_x_positive = TRUE,    # Ensure ratio values are positive before log scaling
-    vline_xintercept = NULL, # Your specific vertical line
+    vline_xintercept = NULL, # vertical line
     hline_yintercepts = c(0, -1, 1), # Your horizontal lines
     num_bins_2d = number_of_bins_2d,
     epsilon_val = epsilon
@@ -228,7 +228,7 @@ F_KON_CONVERSION <- 6.022e23 * 1e-15
   data_for_plot_kd <- gsa_results_with_inputs_df %>%
     filter(is.finite(k_on) & is.finite(k_off) & k_off > epsilon & k_on > epsilon) %>% # Ensure positive for ratio
     mutate(
-      kd = (k_off + epsilon) / (k_on * F_KON_CONVERSION + epsilon) # Calculate ratio and add as a new column
+      kd = (k_off + epsilon) / (k_on * F_KON_CONVERSION + epsilon) # Calculate ratio 
     ) %>% mutate(regulation_strength = abs(regulation_strength))
 
   # 2. Call the generic plotting function
@@ -241,8 +241,8 @@ F_KON_CONVERSION <- 6.022e23 * 1e-15
     y_axis_label = expression(log[2]("Protein Reg. Strength")), # Assuming your output is log2
     use_log_x_scale = TRUE,      # To apply log10 scale to the ratio values on x-axis
     filter_x_positive = TRUE,    # Ensure ratio values are positive before log scaling
-    vline_xintercept = NULL, # Your specific vertical line
-    hline_yintercepts = c(0, -1, 1), # Your horizontal lines
+    vline_xintercept = NULL, # specific vertical line
+    hline_yintercepts = c(0, -1, 1), # horizontal lines
     num_bins_2d = number_of_bins_2d,
     epsilon_val = epsilon
   )
