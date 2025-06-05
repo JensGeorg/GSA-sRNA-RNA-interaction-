@@ -74,7 +74,21 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
 
 ## Analyze results
 
+The original data can be downloaded from zenodo.
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15599898.svg)](https://doi.org/10.5281/zenodo.15599898)
+
 ```R
+# get data
+# install.packages("zenodoR")
+
+library(zenodoR)
+target_doi <- "10.5281/zenodo.15599898" 
+target_filename <- "gsa_analysis_outputs.RData"
+zenodo_record <- get_zenodo(doi = target_doi) 
+downloaded_files <- zenodo_download(record = zenodo_record, 
+                                      files = target_filename)
+
 source("src/model_and_metric_functions.R")
 source("src/gsa_sobol_functions.R")
 source("src/gsa_results_scatterplots.R")
