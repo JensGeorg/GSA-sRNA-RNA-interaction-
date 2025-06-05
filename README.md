@@ -18,6 +18,13 @@ The GSA process involves the following key steps, implemented in the scripts:
     * ST: Measures the total contribution of a parameter, including its main effect and all interactions with other parameters.
 7.  **Result Visualization & Storage**: Sobol indices are plotted, and the GSA design matrix along with model outputs are saved for further post-processing (like the interaction and ratio analyses we discussed previously).
 
+## Data Availability
+
+The raw and processed data from the Global Sensitivity Analysis presented in this project, including the `gsa_results_with_inputs_df` and other relevant outputs, are too large to be hosted directly in this GitHub repository. They have been archived on Zenodo and are publicly available:
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15599898.svg)](https://doi.org/10.5281/zenodo.15599898)
+
+
 ## How to Run
 
 1.  **Prerequisites**:
@@ -64,12 +71,6 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
 * (Potentially other helper functions for GSA setup or post-processing if you expand).
 
 ---
-## Data Availability
-
-The raw and processed data from the Global Sensitivity Analysis presented in this project, including the `gsa_results_with_inputs_df` and other relevant outputs, are too large to be hosted directly in this GitHub repository. They have been archived on Zenodo and are publicly available:
-
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15599898.svg)](https://doi.org/10.5281/zenodo.15599898)
-
 
 ## Analyze results
 
