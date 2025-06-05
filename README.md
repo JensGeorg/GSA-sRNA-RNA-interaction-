@@ -41,7 +41,7 @@ The GSA process involves the following key steps, implemented in the scripts:
 6.  **Sensitivity Indices Calculation**: First-order (S1) and total-order (ST) Sobol' sensitivity indices are calculated.
     * S1: Measures the contribution of a single parameter's variance to the output variance (main effect).
     * ST: Measures the total contribution of a parameter, including its main effect and all interactions with other parameters.
-7.  **Result Visualization & Storage**: Sobol indices are plotted, and the GSA design matrix along with model outputs are saved for further post-processing (like the interaction and ratio analyses we discussed previously).
+7.  **Result Visualization & Storage**: Sobol indices are plotted, and the GSA design matrix along with model outputs are saved for further post-processing.
 
 ## Data Availability
 
