@@ -93,7 +93,6 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
 
 ### `src/gsa_sobol_functions.R`
 * `single_gsa_run`: A wrapper function to run a single ODE simulation with a given parameter set (unscaling parameters based on their distribution) and calculate the output metric. This is designed for use with `parApply`.
-* (Potentially other helper functions for GSA setup or post-processing if you expand).
 
 ---
 
