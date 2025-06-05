@@ -97,4 +97,4 @@ gsa_param_names_to_vary <- names(gsa_parameter_definitions)
 sobol_plot <- plot_sobol_indices(sobol_indices_summary, gsa_param_names_to_vary)
 print(sobol_plot)
 ```
-<img src="figures/sobol_indices.jpg" alt="Model Scheme" width="60%">
+<img src="figures/sobol_indices.png" alt="Model Scheme" width="60%">
