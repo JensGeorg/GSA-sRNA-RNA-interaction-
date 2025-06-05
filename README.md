@@ -199,4 +199,31 @@ print(plot_km_kms_ratio)
 ```R
 # plot Kd distribution
 
+F_KON_CONVERSION <- 6.022e23 * 1e-15
+
+  data_for_plot_kd <- gsa_results_with_inputs_df %>%
+    filter(is.finite(k_on) & is.finite(k_off) & k_off > epsilon & k_on > epsilon) %>% # Ensure positive for ratio
+    mutate(
+      kd = (k_off + epsilon) / (k_on * F_KON_CONVERSION + epsilon) # Calculate ratio and add as a new column
+    ) %>% mutate(regulation_strength = abs(regulation_strength))
+
+  # 2. Call the generic plotting function
+  plot_kd <- generate_gsa_visualization(
+    data_df = data_for_plot_kd,
+    x_var_col = "kd", # Use the newly created ratio column
+    y_var_col = output_col_name,
+    plot_title = expression("Regulation Strength vs. " ~ (italic(k)[d])),
+    x_axis_label = expression((italic(k)[d])),
+    y_axis_label = expression(log[2]("Protein Reg. Strength")), # Assuming your output is log2
+    use_log_x_scale = TRUE,      # To apply log10 scale to the ratio values on x-axis
+    filter_x_positive = TRUE,    # Ensure ratio values are positive before log scaling
+    vline_xintercept = NULL, # Your specific vertical line
+    hline_yintercepts = c(0, -1, 1), # Your horizontal lines
+    num_bins_2d = number_of_bins_2d,
+    epsilon_val = epsilon
+  )
+
+  print(plot_kd)
+
 ```
+<img src="figures/plot_kd.png" alt="Model Scheme" width="60%">
