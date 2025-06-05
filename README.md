@@ -10,10 +10,6 @@ This repository contains R scripts to perform a Global Sensitivity Analysis (GSA
 - [Data Availability](#data-availability)
 - [How to Run](#how-to-run)
 - [Further Analysis](#further-analysis)
-- [Code Overview](#code-overview)
-  - [run_gsa_analysis.R](#run_gsa_analysisr)
-  - [src/model_and_metric_functions.R](#srcmodel_and_metric_functionsr)
-  - [src/gsa_sobol_functions.R](#srcgsa_sobol_functionsr)
 - [Analyze results](#analyze-results)
 
 ---
@@ -76,23 +72,6 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
 * Investigating pairwise interactions (product terms).
 * Testing specific non-linear relationships (e.g., ratios).
 * Generating conditional effect plots.
-
-## Code Overview
-
-### `run_gsa_analysis.R`
-* Loads required packages and sources helper functions.
-* Defines global constants and baseline parameters.
-* Sets up GSA parameters (ranges, distributions).
-* Calls functions from `src/gsa_sobol_functions.R` to perform Sobol sampling and run simulations in parallel.
-* Processes and plots Sobol' indices.
-* Unscales parameter samples and saves the combined input-output dataframe.
-
-### `src/model_and_metric_functions.R`
-* `model_func_gsa`: The ODE function compatible with `deSolve::ode`.
-* `calculate_protein_regulation_strength`: Calculates the output metric from ODE simulation results.
-
-### `src/gsa_sobol_functions.R`
-* `single_gsa_run`: A wrapper function to run a single ODE simulation with a given parameter set (unscaling parameters based on their distribution) and calculate the output metric. This is designed for use with `parApply`.
 
 ---
 
