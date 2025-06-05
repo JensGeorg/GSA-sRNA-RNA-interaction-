@@ -197,6 +197,6 @@ print(plot_km_kms_ratio)
 <img src="figures/plot_km_kms_ratio.png" alt="Model Scheme" width="60%">
 
 ```R
-
+# plot Kd distribution
 
 ```
