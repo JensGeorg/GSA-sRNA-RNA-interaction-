@@ -79,22 +79,13 @@ The original data can be downloaded from zenodo.
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15599898.svg)](https://doi.org/10.5281/zenodo.15599898)
 
 ```R
-# get data
-# install.packages("zenodoR")
-
-library(zenodoR)
-target_doi <- "10.5281/zenodo.15599898" 
-target_filename <- "gsa_analysis_outputs.RData"
-zenodo_record <- get_zenodo(doi = target_doi) 
-downloaded_files <- zenodo_download(record = zenodo_record, 
-                                      files = target_filename)
 
 source("src/model_and_metric_functions.R")
 source("src/gsa_sobol_functions.R")
 source("src/gsa_results_scatterplots.R")
 
 # load results form the paper
-load("data/gsa_analysis_outputs.RData")
+load("gsa_analysis_outputs.RData") # download from zenodo or generate own dataset
 
 # prepare objects from the loaded data
 gsa_results_with_inputs_df<-gsa_output_data[[1]]
@@ -102,7 +93,8 @@ sobol_indices_summary<-gsa_output_data[[2]]
 gsa_parameter_definitions<-gsa_output_data[[3]]  
 gsa_param_names_to_vary <- names(gsa_parameter_definitions)
 
-# plot data
+# plot sobol indices
 sobol_plot <- plot_sobol_indices(sobol_indices_summary, gsa_param_names_to_vary)
 print(sobol_plot)
 ```
+<img src="figures/sobol_indices.jpg" alt="Model Scheme" width="60%">
