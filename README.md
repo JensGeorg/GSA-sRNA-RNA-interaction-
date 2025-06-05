@@ -343,7 +343,7 @@ The output `gsa_results_with_inputs_df` (saved in the `.RData` file) from this G
 
 
    # --- 3. Run Sobol GSA (in Parallel) ---
-   n_base_samples_sobol <- 1e5 # ADJUST AS NEEDED (e.g., 1e3 for quick, 1e4+ for robust)
+   n_base_samples_sobol <- 1e3 # ADJUST AS NEEDED (e.g., 1e3 for quick, 1e4+ for robust)
    cat("Preparing Sobol GSA with", n_base_samples_sobol, "base samples for", k_gsa_varied, "parameters.\n")
 
    # Generate Sobol design matrices (scaled 0-1)
