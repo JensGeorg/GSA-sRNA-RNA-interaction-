@@ -108,7 +108,7 @@ source("src/model_and_metric_functions.R")
 source("src/gsa_sobol_functions.R")
 
 
-# load results form the paper
+# load results from the paper
 load("gsa_analysis_outputs.RData") # download from zenodo or generate own dataset
 
 # prepare objects from the loaded data
