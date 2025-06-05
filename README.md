@@ -2,6 +2,22 @@
 
 This repository contains R scripts to perform a Global Sensitivity Analysis (GSA) using Sobol' methods on an Ordinary Differential Equation (ODE) model for sRNA-RNA interaction, as described in the paper "Harnessing small RNAs as synthetic post-transcriptional regulators in prokaryotes" (DOI). The analysis aims to identify which model parameters most significantly influence a defined output metric, considering both individual (first-order) and total-order effects (including interactions).
 
+## Table of Contents
+
+- [Global Sensitivity Analysis of an ODE Model for sRNA-RNA interaction](#global-sensitivity-analysis-of-an-ode-model-for-srna-rna-interaction)
+- [Interactive Shiny App](#interactive-shiny-app)
+- [Methodology Overview](#methodology-overview)
+- [Data Availability](#data-availability)
+- [How to Run](#how-to-run)
+- [Further Analysis](#further-analysis)
+- [Code Overview](#code-overview)
+  - [run_gsa_analysis.R](#run_gsa_analysisr)
+  - [src/model_and_metric_functions.R](#srcmodel_and_metric_functionsr)
+  - [src/gsa_sobol_functions.R](#srcgsa_sobol_functionsr)
+- [Analyze results](#analyze-results)
+
+---
+
 <img src="figures/scheme_w_odes.jpg" alt="Model Scheme" width="90%">
 
 ## Interactive Shiny App
